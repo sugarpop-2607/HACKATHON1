@@ -114,7 +114,11 @@
 
         <header class="topbar">
 
-            <button class="mobile-menu" id="mobileMenu">
+            <button
+                class="mobile-menu"
+                id="mobileMenu"
+                type="button"
+            >
                 ☰
             </button>
 
@@ -124,11 +128,17 @@
 
             <div class="topbar-actions">
 
-                <button class="top-icon">
+                <button
+                    class="top-icon"
+                    type="button"
+                >
                     ♢
                 </button>
 
-                <button class="top-icon">
+                <button
+                    class="top-icon"
+                    type="button"
+                >
                     ?
                 </button>
 
@@ -143,7 +153,7 @@
 
         <section class="page">
 
-            <!-- HEADER -->
+            <!-- PAGE HEADER -->
 
             <div class="page-header">
 
@@ -158,7 +168,7 @@
                     </h1>
 
                     <p>
-                        Upload three vendor quotations and let AI identify
+                        Upload vendor quotations and let AI identify
                         the best procurement option.
                     </p>
 
@@ -167,7 +177,9 @@
             </div>
 
 
-            <!-- UPLOAD SECTION -->
+            <!-- =========================================
+                 UPLOAD SECTION
+            ========================================== -->
 
             <section class="upload-panel">
 
@@ -180,7 +192,7 @@
                         </h2>
 
                         <p>
-                            Select exactly three PDF quotation files.
+                            Upload 2 or 3 vendor quotation documents.
                         </p>
 
                     </div>
@@ -192,30 +204,52 @@
                 </div>
 
 
-                <div class="drop-zone" id="dropZone">
+                <!-- DROP ZONE -->
+
+                <div
+                    class="drop-zone"
+                    id="dropZone"
+                >
+
+                    <!-- REAL FILE INPUT -->
 
                     <input
                         type="file"
                         id="fileInput"
-                        accept=".pdf,application/pdf"
+                        accept=".pdf,.jpg,.jpeg,.png,application/pdf,image/jpeg,image/png"
                         multiple
                         hidden
                     >
+
 
                     <div class="upload-icon">
                         ↑
                     </div>
 
+
                     <h3>
-                        Drop quotation PDFs here
+                        Drop quotation documents here
                     </h3>
 
+
                     <p>
-                        or click to browse your computer
+                        or click the button below to browse
                     </p>
 
+
+                    <!-- EXPLICIT BROWSE BUTTON -->
+
+                    <button
+                        type="button"
+                        id="browseButton"
+                        class="browse-button"
+                    >
+                        Choose Documents
+                    </button>
+
+
                     <span>
-                        PDF files only · 3 files required
+                        PDF, JPG, JPEG or PNG · Maximum 3 documents
                     </span>
 
                 </div>
@@ -223,22 +257,27 @@
 
                 <!-- FILE LIST -->
 
-                <div class="file-list" id="fileList">
-
-                    <!-- Javascript inserts files here -->
-
+                <div
+                    class="file-list"
+                    id="fileList"
+                >
                 </div>
 
 
-                <!-- ACTION -->
+                <!-- ACTIONS -->
 
                 <div class="upload-actions">
 
-                    <div class="file-counter" id="fileCounter">
-                        0 / 3 quotations selected
+                    <div
+                        class="file-counter"
+                        id="fileCounter"
+                    >
+                        0 / 3 documents selected
                     </div>
 
+
                     <button
+                        type="button"
                         class="analyze-button"
                         id="analyzeButton"
                         disabled
@@ -252,7 +291,9 @@
             </section>
 
 
-            <!-- PROCESSING -->
+            <!-- =========================================
+                 PROCESSING
+            ========================================== -->
 
             <section
                 class="processing-panel hidden"
@@ -272,10 +313,12 @@
                 </p>
 
                 <div class="progress-track">
+
                     <div
                         class="progress-bar"
                         id="progressBar"
                     ></div>
+
                 </div>
 
                 <div class="processing-steps">
@@ -285,17 +328,17 @@
                         Uploading documents
                     </div>
 
-                    <div class="processing-step" id="step2">
+                    <div class="processing-step">
                         <span>2</span>
                         Extracting quotation data
                     </div>
 
-                    <div class="processing-step" id="step3">
+                    <div class="processing-step">
                         <span>3</span>
                         Comparing vendors
                     </div>
 
-                    <div class="processing-step" id="step4">
+                    <div class="processing-step">
                         <span>4</span>
                         Selecting best option
                     </div>
@@ -305,28 +348,44 @@
             </section>
 
 
-            <!-- ERROR -->
+            <!-- =========================================
+                 ERROR
+            ========================================== -->
 
             <div
                 class="error-panel hidden"
                 id="errorPanel"
             >
-                <div class="error-icon">!</div>
+
+                <div class="error-icon">
+                    !
+                </div>
 
                 <div>
-                    <strong>Analysis failed</strong>
+
+                    <strong>
+                        Analysis failed
+                    </strong>
+
                     <p id="errorMessage">
                         Something went wrong.
                     </p>
+
                 </div>
 
-                <button id="retryButton">
+                <button
+                    type="button"
+                    id="retryButton"
+                >
                     Try again
                 </button>
+
             </div>
 
 
-            <!-- RESULTS -->
+            <!-- =========================================
+                 RESULTS
+            ========================================== -->
 
             <section
                 class="results hidden"
@@ -348,6 +407,7 @@
                     </div>
 
                     <button
+                        type="button"
                         class="new-analysis"
                         id="newAnalysisButton"
                     >
@@ -411,11 +471,13 @@
                 <div class="reasoning-card">
 
                     <div class="card-title">
+
                         <div class="card-icon">
                             ✦
                         </div>
 
                         <div>
+
                             <h3>
                                 Why AI selected this vendor
                             </h3>
@@ -423,8 +485,11 @@
                             <p>
                                 Procurement recommendation
                             </p>
+
                         </div>
+
                     </div>
+
 
                     <p
                         class="reasoning-text"
@@ -443,13 +508,16 @@
                     <div class="card-heading">
 
                         <div>
+
                             <h3>
                                 Vendor Comparison
                             </h3>
 
                             <p>
-                                AI extracted and compared the submitted quotations.
+                                AI extracted and compared
+                                the submitted quotations.
                             </p>
+
                         </div>
 
                     </div>
@@ -460,12 +528,14 @@
                         <table>
 
                             <thead>
+
                                 <tr>
                                     <th>Vendor</th>
                                     <th>Total Price</th>
                                     <th>Delivery</th>
                                     <th>Warranty</th>
                                 </tr>
+
                             </thead>
 
                             <tbody id="comparisonBody">
@@ -485,6 +555,8 @@
 
 </div>
 
+
+<!-- JAVASCRIPT -->
 
 <script src="quotation.js"></script>
 
