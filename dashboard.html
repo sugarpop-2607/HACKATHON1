@@ -1,0 +1,1111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Dashboard — Procurement Intelligence</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+        rel="stylesheet"
+    >
+
+    <link rel="stylesheet" href="dashboard.css">
+</head>
+
+<body>
+
+<div class="app">
+
+    <!-- =====================================================
+         SIDEBAR
+    ====================================================== -->
+
+    <aside class="sidebar">
+
+        <div class="brand">
+            <div class="brand-icon">✦</div>
+
+            <div>
+                <h2>Intelligence</h2>
+                <span>Procurement Platform</span>
+            </div>
+        </div>
+
+
+        <nav class="sidebar-nav">
+
+            <p class="nav-label">WORKSPACE</p>
+
+            <a href="index.html" class="nav-item">
+                <span class="nav-icon">✦</span>
+                Copilot
+            </a>
+
+            <a href="dashboard.html" class="nav-item active">
+                <span class="nav-icon">◈</span>
+                Dashboard
+            </a>
+
+
+            <p class="nav-label">PROCUREMENT</p>
+
+            <a href="#" class="nav-item">
+                <span class="nav-icon">⌁</span>
+                RFQs
+                <span class="nav-count">4</span>
+            </a>
+
+            <a href="#" class="nav-item">
+                <span class="nav-icon">♙</span>
+                Vendors
+            </a>
+
+            <a href="#" class="nav-item">
+                <span class="nav-icon">▤</span>
+                Quote Analysis
+            </a>
+
+
+            <p class="nav-label">OPERATIONS</p>
+
+            <a href="#" class="nav-item">
+                <span class="nav-icon">□</span>
+                Purchase Orders
+            </a>
+
+            <a href="#" class="nav-item">
+                <span class="nav-icon">▥</span>
+                Inventory
+            </a>
+
+            <a href="#" class="nav-item">
+                <span class="nav-icon">◉</span>
+                Finance
+            </a>
+
+        </nav>
+
+
+        <!-- Sidebar bottom -->
+
+        <div class="sidebar-bottom">
+
+            <div class="ai-status">
+
+                <span class="status-dot"></span>
+
+                <div>
+                    <strong>AI Copilot Online</strong>
+                    <small>Ready to analyze</small>
+                </div>
+
+            </div>
+
+
+            <div class="user-card">
+
+                <div class="avatar">
+                    AK
+                </div>
+
+                <div>
+                    <strong>Alex Kumar</strong>
+                    <small>Procurement Manager</small>
+                </div>
+
+                <button class="user-menu">
+                    ⋮
+                </button>
+
+            </div>
+
+        </div>
+
+    </aside>
+
+
+    <!-- =====================================================
+         MAIN CONTENT
+    ====================================================== -->
+
+    <main class="main">
+
+
+        <!-- =================================================
+             TOPBAR
+        ================================================== -->
+
+        <header class="topbar">
+
+            <div class="mobile-menu">
+                ☰
+            </div>
+
+
+            <div class="global-search">
+
+                <span>⌕</span>
+
+                <input
+                    type="text"
+                    id="dashboardSearch"
+                    placeholder="Search purchases, suppliers..."
+                >
+
+                <kbd>⌘ K</kbd>
+
+            </div>
+
+
+            <div class="topbar-actions">
+
+                <button class="top-icon notification">
+                    ♢
+                    <span></span>
+                </button>
+
+                <button class="top-icon">
+                    ?
+                </button>
+
+                <div class="top-avatar">
+                    AK
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- =================================================
+             DASHBOARD CONTENT
+        ================================================== -->
+
+        <section class="dashboard">
+
+
+            <!-- PAGE HEADER -->
+
+            <div class="page-header">
+
+                <div>
+
+                    <span class="eyebrow">
+                        PROCUREMENT OVERVIEW
+                    </span>
+
+                    <h1>
+                        Procurement Overview
+                    </h1>
+
+                    <p>
+                        A simple summary of everything your organization has purchased.
+                    </p>
+
+                </div>
+
+
+                <div class="header-actions">
+
+                    <button class="date-button">
+                        This Year
+                        <span>⌄</span>
+                    </button>
+
+                    <button class="export-button">
+                        ↓
+                        Export Report
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 KPI CARDS
+            ================================================== -->
+
+            <div class="stats-grid">
+
+
+                <!-- TOTAL SPENT -->
+
+                <div class="stat-card">
+
+                    <div class="stat-card-top">
+
+                        <div>
+
+                            <span class="stat-label">
+                                Total Spent
+                            </span>
+
+                            <h2>
+                                ₹2.84 Cr
+                            </h2>
+
+                        </div>
+
+                        <div class="stat-icon money">
+                            ₹
+                        </div>
+
+                    </div>
+
+                    <div class="stat-change positive">
+                        ↑ 8.2%
+                        <span>this year</span>
+                    </div>
+
+                </div>
+
+
+                <!-- PURCHASES -->
+
+                <div class="stat-card">
+
+                    <div class="stat-card-top">
+
+                        <div>
+
+                            <span class="stat-label">
+                                Purchases
+                            </span>
+
+                            <h2>
+                                186
+                            </h2>
+
+                        </div>
+
+                        <div class="stat-icon purchases">
+                            □
+                        </div>
+
+                    </div>
+
+                    <div class="stat-change positive">
+                        ↑ 14.1%
+                        <span>vs last year</span>
+                    </div>
+
+                </div>
+
+
+                <!-- MONEY SAVED -->
+
+                <div class="stat-card highlight-card">
+
+                    <div class="stat-card-top">
+
+                        <div>
+
+                            <span class="stat-label">
+                                Money Saved
+                            </span>
+
+                            <h2>
+                                ₹18.6 L
+                            </h2>
+
+                        </div>
+
+                        <div class="stat-icon savings">
+                            ✦
+                        </div>
+
+                    </div>
+
+                    <div class="stat-change positive">
+                        ↑ 21.4%
+                        <span>through AI</span>
+                    </div>
+
+                </div>
+
+
+                <!-- SUPPLIERS -->
+
+                <div class="stat-card">
+
+                    <div class="stat-card-top">
+
+                        <div>
+
+                            <span class="stat-label">
+                                Suppliers
+                            </span>
+
+                            <h2>
+                                42
+                            </h2>
+
+                        </div>
+
+                        <div class="stat-icon suppliers">
+                            ♙
+                        </div>
+
+                    </div>
+
+                    <div class="stat-change neutral">
+                        6 new
+                        <span>this year</span>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 CHART + CATEGORY
+            ================================================== -->
+
+            <div class="overview-grid">
+
+
+                <!-- SPENDING CHART -->
+
+                <div class="panel spending-panel">
+
+                    <div class="panel-header">
+
+                        <div>
+
+                            <h3>
+                                Spending Over Time
+                            </h3>
+
+                            <p>
+                                How much your organization spent each month
+                            </p>
+
+                        </div>
+
+                        <button class="small-filter">
+                            Monthly ▾
+                        </button>
+
+                    </div>
+
+
+                    <div class="chart">
+
+                        <div class="chart-y-axis">
+
+                            <span>30L</span>
+                            <span>25L</span>
+                            <span>20L</span>
+                            <span>15L</span>
+                            <span>10L</span>
+                            <span>5L</span>
+                            <span>0</span>
+
+                        </div>
+
+
+                        <div class="chart-area">
+
+                            <div class="grid-line"></div>
+                            <div class="grid-line"></div>
+                            <div class="grid-line"></div>
+                            <div class="grid-line"></div>
+                            <div class="grid-line"></div>
+
+
+                            <div class="bars">
+
+                                <div class="bar-column">
+                                    <div class="bar" style="height:48%"></div>
+                                    <span>Jan</span>
+                                </div>
+
+                                <div class="bar-column">
+                                    <div class="bar" style="height:62%"></div>
+                                    <span>Feb</span>
+                                </div>
+
+                                <div class="bar-column">
+                                    <div class="bar" style="height:54%"></div>
+                                    <span>Mar</span>
+                                </div>
+
+                                <div class="bar-column">
+                                    <div class="bar" style="height:73%"></div>
+                                    <span>Apr</span>
+                                </div>
+
+                                <div class="bar-column">
+                                    <div class="bar" style="height:66%"></div>
+                                    <span>May</span>
+                                </div>
+
+                                <div class="bar-column">
+                                    <div class="bar" style="height:86%"></div>
+                                    <span>Jun</span>
+                                </div>
+
+                                <div class="bar-column">
+                                    <div class="bar" style="height:74%"></div>
+                                    <span>Jul</span>
+                                </div>
+
+                                <div class="bar-column current">
+                                    <div class="bar" style="height:91%"></div>
+                                    <span>Aug</span>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="chart-summary">
+
+                        <div>
+
+                            <span>
+                                Highest spending month
+                            </span>
+
+                            <strong>
+                                August — ₹28.4L
+                            </strong>
+
+                        </div>
+
+                        <div>
+
+                            <span>
+                                Average monthly spend
+                            </span>
+
+                            <strong>
+                                ₹23.6L
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- CATEGORY BREAKDOWN -->
+
+                <div class="panel category-panel">
+
+                    <div class="panel-header">
+
+                        <div>
+
+                            <h3>
+                                Where Did The Money Go?
+                            </h3>
+
+                            <p>
+                                Spending by category
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="category-list">
+
+
+                        <div class="category-item">
+
+                            <div class="category-info">
+
+                                <span class="category-dot manufacturing"></span>
+
+                                <div>
+                                    <strong>Manufacturing</strong>
+                                    <small>29% of spending</small>
+                                </div>
+
+                            </div>
+
+                            <strong>₹82L</strong>
+
+                        </div>
+
+
+                        <div class="category-item">
+
+                            <div class="category-info">
+
+                                <span class="category-dot technology"></span>
+
+                                <div>
+                                    <strong>Technology</strong>
+                                    <small>21% of spending</small>
+                                </div>
+
+                            </div>
+
+                            <strong>₹61L</strong>
+
+                        </div>
+
+
+                        <div class="category-item">
+
+                            <div class="category-info">
+
+                                <span class="category-dot packaging"></span>
+
+                                <div>
+                                    <strong>Packaging</strong>
+                                    <small>15% of spending</small>
+                                </div>
+
+                            </div>
+
+                            <strong>₹43L</strong>
+
+                        </div>
+
+
+                        <div class="category-item">
+
+                            <div class="category-info">
+
+                                <span class="category-dot logistics"></span>
+
+                                <div>
+                                    <strong>Logistics</strong>
+                                    <small>11% of spending</small>
+                                </div>
+
+                            </div>
+
+                            <strong>₹31L</strong>
+
+                        </div>
+
+
+                        <div class="category-item">
+
+                            <div class="category-info">
+
+                                <span class="category-dot office"></span>
+
+                                <div>
+                                    <strong>Office</strong>
+                                    <small>10% of spending</small>
+                                </div>
+
+                            </div>
+
+                            <strong>₹27L</strong>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 AI INSIGHTS
+            ================================================== -->
+
+            <div class="panel ai-insights-panel">
+
+                <div class="ai-insights-header">
+
+                    <div class="ai-title">
+
+                        <div class="ai-sparkle">
+                            ✦
+                        </div>
+
+                        <div>
+
+                            <span class="eyebrow">
+                                AI INTELLIGENCE
+                            </span>
+
+                            <h2>
+                                What AI noticed
+                            </h2>
+
+                        </div>
+
+                    </div>
+
+                    <span class="ai-powered">
+                        AI POWERED
+                    </span>
+
+                </div>
+
+
+                <div class="insights-grid">
+
+
+                    <div class="insight-card">
+
+                        <div class="insight-icon savings">
+                            ₹
+                        </div>
+
+                        <div>
+
+                            <h3>
+                                You saved ₹18.6L
+                            </h3>
+
+                            <p>
+                                AI-assisted vendor selection helped reduce procurement costs this year.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="insight-card">
+
+                        <div class="insight-icon warning">
+                            ↑
+                        </div>
+
+                        <div>
+
+                            <h3>
+                                Packaging costs increased 18%
+                            </h3>
+
+                            <p>
+                                Spending in this category has risen steadily over the last three months.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="insight-card">
+
+                        <div class="insight-icon reliability">
+                            ★
+                        </div>
+
+                        <div>
+
+                            <h3>
+                                Alpha Industries is your most reliable supplier
+                            </h3>
+
+                            <p>
+                                96% of their deliveries arrived on time across 24 purchases.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="insight-card">
+
+                        <div class="insight-icon opportunity">
+                            ✦
+                        </div>
+
+                        <div>
+
+                            <h3>
+                                ₹2.4L potential savings
+                            </h3>
+
+                            <p>
+                                AI identified two suppliers that could be replaced with lower-cost alternatives.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 SUPPLIERS + RECENT PURCHASES
+            ================================================== -->
+
+            <div class="bottom-grid">
+
+
+                <!-- TOP SUPPLIERS -->
+
+                <div class="panel suppliers-panel">
+
+                    <div class="panel-header">
+
+                        <div>
+
+                            <h3>
+                                Top Suppliers
+                            </h3>
+
+                            <p>
+                                Your most frequently used suppliers
+                            </p>
+
+                        </div>
+
+                        <button class="text-button">
+                            View all →
+                        </button>
+
+                    </div>
+
+
+                    <div class="supplier-list">
+
+
+                        <div class="supplier-row">
+
+                            <div class="supplier-rank">
+                                01
+                            </div>
+
+                            <div class="supplier-avatar">
+                                A
+                            </div>
+
+                            <div class="supplier-info">
+
+                                <strong>
+                                    Alpha Industries
+                                </strong>
+
+                                <span>
+                                    24 purchases
+                                </span>
+
+                            </div>
+
+                            <strong class="supplier-spend">
+                                ₹38.4L
+                            </strong>
+
+                        </div>
+
+
+                        <div class="supplier-row">
+
+                            <div class="supplier-rank">
+                                02
+                            </div>
+
+                            <div class="supplier-avatar">
+                                N
+                            </div>
+
+                            <div class="supplier-info">
+
+                                <strong>
+                                    Nova Systems
+                                </strong>
+
+                                <span>
+                                    19 purchases
+                                </span>
+
+                            </div>
+
+                            <strong class="supplier-spend">
+                                ₹31.2L
+                            </strong>
+
+                        </div>
+
+
+                        <div class="supplier-row">
+
+                            <div class="supplier-rank">
+                                03
+                            </div>
+
+                            <div class="supplier-avatar">
+                                V
+                            </div>
+
+                            <div class="supplier-info">
+
+                                <strong>
+                                    Vertex Supply
+                                </strong>
+
+                                <span>
+                                    16 purchases
+                                </span>
+
+                            </div>
+
+                            <strong class="supplier-spend">
+                                ₹26.8L
+                            </strong>
+
+                        </div>
+
+
+                        <div class="supplier-row">
+
+                            <div class="supplier-rank">
+                                04
+                            </div>
+
+                            <div class="supplier-avatar">
+                                P
+                            </div>
+
+                            <div class="supplier-info">
+
+                                <strong>
+                                    PrimeTech
+                                </strong>
+
+                                <span>
+                                    12 purchases
+                                </span>
+
+                            </div>
+
+                            <strong class="supplier-spend">
+                                ₹19.5L
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- RECENT PURCHASES -->
+
+                <div class="panel recent-panel">
+
+                    <div class="panel-header">
+
+                        <div>
+
+                            <h3>
+                                Recent Purchases
+                            </h3>
+
+                            <p>
+                                Latest completed purchases
+                            </p>
+
+                        </div>
+
+                        <button class="text-button">
+                            View all →
+                        </button>
+
+                    </div>
+
+
+                    <div class="purchase-list">
+
+
+                        <div class="purchase-row">
+
+                            <div class="purchase-icon">
+                                ◫
+                            </div>
+
+                            <div class="purchase-info">
+
+                                <strong>
+                                    Industrial Sensors
+                                </strong>
+
+                                <span>
+                                    Alpha Industries · Aug 18
+                                </span>
+
+                            </div>
+
+                            <strong>
+                                ₹4.8L
+                            </strong>
+
+                        </div>
+
+
+                        <div class="purchase-row">
+
+                            <div class="purchase-icon">
+                                ◫
+                            </div>
+
+                            <div class="purchase-info">
+
+                                <strong>
+                                    Server Equipment
+                                </strong>
+
+                                <span>
+                                    Nova Systems · Aug 12
+                                </span>
+
+                            </div>
+
+                            <strong>
+                                ₹8.7L
+                            </strong>
+
+                        </div>
+
+
+                        <div class="purchase-row">
+
+                            <div class="purchase-icon">
+                                ◫
+                            </div>
+
+                            <div class="purchase-info">
+
+                                <strong>
+                                    Packaging Materials
+                                </strong>
+
+                                <span>
+                                    Vertex Supply · Aug 08
+                                </span>
+
+                            </div>
+
+                            <strong>
+                                ₹2.1L
+                            </strong>
+
+                        </div>
+
+
+                        <div class="purchase-row">
+
+                            <div class="purchase-icon">
+                                ◫
+                            </div>
+
+                            <div class="purchase-info">
+
+                                <strong>
+                                    Office Equipment
+                                </strong>
+
+                                <span>
+                                    PrimeTech · Aug 03
+                                </span>
+
+                            </div>
+
+                            <strong>
+                                ₹1.4L
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<script>
+
+    /* ============================================
+       DASHBOARD SEARCH
+    ============================================ */
+
+    const searchInput = document.getElementById("dashboardSearch");
+
+    searchInput.addEventListener("input", function () {
+
+        const searchTerm = this.value.toLowerCase().trim();
+
+        const rows = document.querySelectorAll(
+            ".supplier-row, .purchase-row"
+        );
+
+        rows.forEach(row => {
+
+            const text = row.textContent.toLowerCase();
+
+            row.style.display =
+                text.includes(searchTerm)
+                    ? ""
+                    : "none";
+
+        });
+
+    });
+
+
+    /* ============================================
+       MOBILE SIDEBAR
+    ============================================ */
+
+    const mobileMenu =
+        document.querySelector(".mobile-menu");
+
+    const sidebar =
+        document.querySelector(".sidebar");
+
+    mobileMenu.addEventListener("click", () => {
+
+        sidebar.classList.toggle("mobile-open");
+
+    });
+
+
+    /* ============================================
+       EXPORT BUTTON
+    ============================================ */
+
+    const exportButton =
+        document.querySelector(".export-button");
+
+    exportButton.addEventListener("click", () => {
+
+        alert(
+            "Procurement report export will be connected to the backend later."
+        );
+
+    });
+
+</script>
+
+</body>
+</html>
