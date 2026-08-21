@@ -1,7 +1,68 @@
 /* =========================================================
-   AI PROCUREMENT COPILOT
-   FRONTEND JAVASCRIPT
+   PROCUREMENT AI QUOTE ANALYSIS
 ========================================================= */
+
+
+/* =========================================================
+   CONFIG
+========================================================= */
+
+const API_BASE_URL = "http://127.0.0.1:8000";
+
+
+/* =========================================================
+   ELEMENTS
+========================================================= */
+
+const fileInput = document.getElementById("fileInput");
+const dropZone = document.getElementById("dropZone");
+const fileList = document.getElementById("fileList");
+const fileCounter = document.getElementById("fileCounter");
+
+const analyzeButton =
+    document.getElementById("analyzeButton");
+
+const processingPanel =
+    document.getElementById("processingPanel");
+
+const processingText =
+    document.getElementById("processingText");
+
+const progressBar =
+    document.getElementById("progressBar");
+
+const resultsSection =
+    document.getElementById("resultsSection");
+
+const errorPanel =
+    document.getElementById("errorPanel");
+
+const errorMessage =
+    document.getElementById("errorMessage");
+
+const retryButton =
+    document.getElementById("retryButton");
+
+const newAnalysisButton =
+    document.getElementById("newAnalysisButton");
+
+const bestVendor =
+    document.getElementById("bestVendor");
+
+const bestScore =
+    document.getElementById("bestScore");
+
+const reasoningText =
+    document.getElementById("reasoningText");
+
+const comparisonBody =
+    document.getElementById("comparisonBody");
+
+const mobileMenu =
+    document.getElementById("mobileMenu");
+
+const sidebar =
+    document.querySelector(".sidebar");
 
 
 /* =========================================================
@@ -10,1055 +71,59 @@
 
 let selectedFiles = [];
 
-let currentPage = "copilot";
+
+/* =========================================================
+   FILE INPUT
+========================================================= */
+
+dropZone.addEventListener("click", () => {
+    fileInput.click();
+});
+
+
+fileInput.addEventListener("change", () => {
+
+    const files = Array.from(fileInput.files);
+
+    addFiles(files);
+
+    fileInput.value = "";
+
+});
 
 
 /* =========================================================
-   DOM
+   DRAG & DROP
 ========================================================= */
 
-const copilotInput =
-    document.getElementById("copilotInput");
+dropZone.addEventListener("dragover", (event) => {
 
-const analyzeButton =
-    document.getElementById("analyzeButton");
+    event.preventDefault();
 
-const uploadTrigger =
-    document.getElementById("uploadTrigger");
+    dropZone.classList.add("dragging");
 
-const fileInput =
-    document.getElementById("fileInput");
+});
 
-const uploadModal =
-    document.getElementById("uploadModal");
 
-const closeModal =
-    document.getElementById("closeModal");
+dropZone.addEventListener("dragleave", () => {
 
-const cancelUpload =
-    document.getElementById("cancelUpload");
+    dropZone.classList.remove("dragging");
 
-const uploadButton =
-    document.getElementById("uploadButton");
+});
 
-const dropZone =
-    document.getElementById("dropZone");
 
-const selectedFilesBox =
-    document.getElementById("selectedFiles");
+dropZone.addEventListener("drop", (event) => {
 
-const fileList =
-    document.getElementById("fileList");
+    event.preventDefault();
 
-const fileCount =
-    document.getElementById("fileCount");
+    dropZone.classList.remove("dragging");
 
-const fileCountDisplay =
-    document.getElementById("fileCountDisplay");
+    const files =
+        Array.from(event.dataTransfer.files);
 
-const copilotResponse =
-    document.getElementById("copilotResponse");
+    addFiles(files);
 
-
-/* =========================================================
-   INITIALIZATION
-========================================================= */
-
-document.addEventListener(
-    "DOMContentLoaded",
-    () => {
-
-        setupNavigation();
-
-        setupUpload();
-
-        setupCopilot();
-
-        setupPromptChips();
-
-        setupGlobalSearch();
-
-        setupMobileMenu();
-
-    }
-);
-
-
-/* =========================================================
-   NAVIGATION
-========================================================= */
-
-function setupNavigation() {
-
-    const navItems =
-        document.querySelectorAll(
-            ".nav-item[data-page]"
-        );
-
-
-    navItems.forEach(item => {
-
-        item.addEventListener(
-            "click",
-            () => {
-
-                navigateToPage(
-                    item.dataset.page
-                );
-
-            }
-        );
-
-    });
-
-
-    const pageLinks =
-        document.querySelectorAll(
-            "[data-page-link]"
-        );
-
-
-    pageLinks.forEach(link => {
-
-        link.addEventListener(
-            "click",
-            () => {
-
-                navigateToPage(
-                    link.dataset.pageLink
-                );
-
-            }
-        );
-
-    });
-
-}
-
-
-function navigateToPage(pageName) {
-
-    const pages =
-        document.querySelectorAll(".page");
-
-
-    pages.forEach(page => {
-
-        page.classList.remove("active");
-
-    });
-
-
-    const target =
-        document.getElementById(pageName);
-
-
-    if (!target) return;
-
-
-    target.classList.add("active");
-
-
-    const navItems =
-        document.querySelectorAll(
-            ".nav-item[data-page]"
-        );
-
-
-    navItems.forEach(item => {
-
-        item.classList.toggle(
-            "active",
-            item.dataset.page === pageName
-        );
-
-    });
-
-
-    currentPage = pageName;
-
-
-    closeMobileSidebar();
-
-
-    window.scrollTo({
-        top: 0,
-        behavior: "smooth"
-    });
-
-}
-
-
-/* =========================================================
-   COPILOT
-========================================================= */
-
-function setupCopilot() {
-
-    if (!analyzeButton) return;
-
-
-    analyzeButton.addEventListener(
-        "click",
-        analyzeRequest
-    );
-
-
-    if (copilotInput) {
-
-        copilotInput.addEventListener(
-            "keydown",
-            event => {
-
-                if (
-                    event.key === "Enter" &&
-                    (event.ctrlKey || event.metaKey)
-                ) {
-
-                    event.preventDefault();
-
-                    analyzeRequest();
-
-                }
-
-            }
-        );
-
-
-        copilotInput.addEventListener(
-            "input",
-            () => {
-
-                copilotInput.style.height =
-                    "auto";
-
-                copilotInput.style.height =
-                    Math.min(
-                        copilotInput.scrollHeight,
-                        180
-                    ) + "px";
-
-            }
-        );
-
-    }
-
-}
-
-
-/* =========================================================
-   ANALYZE
-========================================================= */
-
-function analyzeRequest() {
-
-    const query =
-        copilotInput
-            ? copilotInput.value.trim()
-            : "";
-
-
-    if (
-        !query &&
-        selectedFiles.length === 0
-    ) {
-
-        showInputError();
-
-        return;
-
-    }
-
-
-    analyzeButton.disabled = true;
-
-    analyzeButton.innerHTML =
-        "<span>◌</span> Analyzing...";
-
-
-    setTimeout(
-        () => {
-
-            renderAnalysis(query);
-
-            analyzeButton.disabled = false;
-
-            analyzeButton.innerHTML =
-                "<span>✦</span> Analyze";
-
-        },
-        900
-    );
-
-}
-
-
-/* =========================================================
-   INPUT ERROR
-========================================================= */
-
-function showInputError() {
-
-    const box =
-        document.querySelector(
-            ".copilot-box"
-        );
-
-
-    if (!box) return;
-
-
-    box.style.borderColor =
-        "#a96551";
-
-
-    box.style.boxShadow =
-        "0 0 0 4px rgba(169,101,81,.08)";
-
-
-    if (copilotInput) {
-
-        copilotInput.focus();
-
-    }
-
-
-    setTimeout(
-        () => {
-
-            box.style.borderColor = "";
-
-            box.style.boxShadow = "";
-
-        },
-        1000
-    );
-
-}
-
-
-/* =========================================================
-   MOCK AI ANALYSIS
-========================================================= */
-
-function renderAnalysis(query) {
-
-    const documents =
-        selectedFiles.length;
-
-
-    const value =
-        documents >= 3
-            ? "₹7.36L"
-            : "₹4.82L";
-
-
-    const savings =
-        documents >= 3
-            ? "₹94,200"
-            : "₹68,400";
-
-
-    const score =
-        documents >= 3
-            ? 94
-            : 93;
-
-
-    copilotResponse.innerHTML = `
-
-        <div class="response-header">
-
-            <div class="response-title">
-
-                <div class="response-icon">
-                    ✦
-                </div>
-
-                <div>
-
-                    <span>
-                        AI PROCUREMENT ANALYSIS
-                    </span>
-
-                    <h2>
-                        Analysis Complete
-                    </h2>
-
-                </div>
-
-            </div>
-
-
-            <button
-                type="button"
-                class="response-action"
-                id="newAnalysis"
-            >
-                New analysis
-            </button>
-
-        </div>
-
-
-        <div class="ai-summary">
-
-            <div class="summary-icon">
-                ✓
-            </div>
-
-            <div>
-
-                <strong>
-                    AI recommendation ready
-                </strong>
-
-                <p>
-                    ${
-                        documents > 0
-                        ? `Analyzed ${documents}
-                           document${documents > 1 ? "s" : ""}
-                           and evaluated the procurement information.`
-                        : `Analyzed your procurement request
-                           and generated a recommended purchasing strategy.`
-                    }
-                </p>
-
-            </div>
-
-
-            <div class="recommendation-score">
-
-                <strong>
-                    ${score}
-                </strong>
-
-                <span>
-                    /100
-                </span>
-
-            </div>
-
-        </div>
-
-
-        <div class="analysis-grid">
-
-
-            <div class="analysis-card">
-
-                <div class="analysis-card-icon">
-                    ₹
-                </div>
-
-                <div>
-
-                    <small>
-                        ESTIMATED VALUE
-                    </small>
-
-                    <strong>
-                        ${value}
-                    </strong>
-
-                    <p>
-                        Across analyzed quotes
-                    </p>
-
-                </div>
-
-            </div>
-
-
-            <div class="analysis-card">
-
-                <div class="analysis-card-icon">
-                    ↓
-                </div>
-
-                <div>
-
-                    <small>
-                        POTENTIAL SAVINGS
-                    </small>
-
-                    <strong>
-                        ${savings}
-                    </strong>
-
-                    <p>
-                        Compared with alternatives
-                    </p>
-
-                </div>
-
-            </div>
-
-
-            <div class="analysis-card">
-
-                <div class="analysis-card-icon">
-                    ◈
-                </div>
-
-                <div>
-
-                    <small>
-                        VENDORS ANALYZED
-                    </small>
-
-                    <strong>
-                        ${Math.max(documents + 2, 3)}
-                    </strong>
-
-                    <p>
-                        Supplier options
-                    </p>
-
-                </div>
-
-            </div>
-
-
-            <div class="analysis-card">
-
-                <div class="analysis-card-icon">
-                    ◷
-                </div>
-
-                <div>
-
-                    <small>
-                        DELIVERY
-                    </small>
-
-                    <strong>
-                        12 days
-                    </strong>
-
-                    <p>
-                        Recommended timeline
-                    </p>
-
-                </div>
-
-            </div>
-
-        </div>
-
-
-        <div class="recommendation-section">
-
-            <div class="section-heading">
-
-                <span>
-                    AI RECOMMENDATION
-                </span>
-
-                <h3>
-                    Nova Industrial Systems
-                </h3>
-
-            </div>
-
-
-            <div class="reason-list">
-
-
-                <div class="reason-item">
-
-                    <div class="reason-check">
-                        ✓
-                    </div>
-
-                    <div>
-
-                        <strong>
-                            Best total value
-                        </strong>
-
-                        <p>
-                            Competitive pricing with
-                            strong overall value.
-                        </p>
-
-                    </div>
-
-                </div>
-
-
-                <div class="reason-item">
-
-                    <div class="reason-check">
-                        ✓
-                    </div>
-
-                    <div>
-
-                        <strong>
-                            Reliable delivery
-                        </strong>
-
-                        <p>
-                            Delivery timeline meets
-                            procurement requirements.
-                        </p>
-
-                    </div>
-
-                </div>
-
-
-                <div class="reason-item">
-
-                    <div class="reason-check">
-                        ✓
-                    </div>
-
-                    <div>
-
-                        <strong>
-                            Strong warranty
-                        </strong>
-
-                        <p>
-                            Includes extended supplier
-                            support coverage.
-                        </p>
-
-                    </div>
-
-                </div>
-
-
-            </div>
-
-        </div>
-
-
-        <div class="response-actions">
-
-            <button
-                type="button"
-                class="secondary-button"
-                id="exportAnalysis"
-            >
-                Export Analysis
-            </button>
-
-
-            <button
-                type="button"
-                class="primary-button"
-                id="reviewVendor"
-            >
-                Review Vendor →
-            </button>
-
-        </div>
-
-    `;
-
-
-    copilotResponse.classList.remove(
-        "hidden"
-    );
-
-
-    window.setTimeout(
-        () => {
-
-            copilotResponse.scrollIntoView({
-                behavior: "smooth",
-                block: "start"
-            });
-
-        },
-        100
-    );
-
-
-    setupResponseButtons();
-
-}
-
-
-/* =========================================================
-   RESPONSE BUTTONS
-========================================================= */
-
-function setupResponseButtons() {
-
-    const newAnalysis =
-        document.getElementById(
-            "newAnalysis"
-        );
-
-
-    const exportAnalysis =
-        document.getElementById(
-            "exportAnalysis"
-        );
-
-
-    const reviewVendor =
-        document.getElementById(
-            "reviewVendor"
-        );
-
-
-    if (newAnalysis) {
-
-        newAnalysis.addEventListener(
-            "click",
-            () => {
-
-                copilotResponse.classList.add(
-                    "hidden"
-                );
-
-                copilotInput.focus();
-
-            }
-        );
-
-    }
-
-
-    if (exportAnalysis) {
-
-        exportAnalysis.addEventListener(
-            "click",
-            exportResult
-        );
-
-    }
-
-
-    if (reviewVendor) {
-
-        reviewVendor.addEventListener(
-            "click",
-            () => {
-
-                navigateToPage(
-                    "quotes"
-                );
-
-            }
-        );
-
-    }
-
-}
-
-
-/* =========================================================
-   EXPORT
-========================================================= */
-
-function exportResult() {
-
-    const report = `
-
-AI PROCUREMENT ANALYSIS
-=======================
-
-Recommended Vendor:
-Nova Industrial Systems
-
-AI Score:
-93/100
-
-Estimated Procurement Value:
-₹4.82L
-
-Potential Savings:
-₹68,400
-
-Expected Delivery:
-12 days
-
-Reasons:
-- Best total value
-- Reliable delivery
-- Strong warranty
-
-Generated by AI Procurement Copilot.
-
-`;
-
-
-    const blob =
-        new Blob(
-            [report],
-            {
-                type: "text/plain"
-            }
-        );
-
-
-    const url =
-        URL.createObjectURL(blob);
-
-
-    const link =
-        document.createElement("a");
-
-
-    link.href = url;
-
-    link.download =
-        "AI-procurement-analysis.txt";
-
-
-    document.body.appendChild(link);
-
-    link.click();
-
-    link.remove();
-
-    URL.revokeObjectURL(url);
-
-}
-
-
-/* =========================================================
-   UPLOAD SYSTEM
-========================================================= */
-
-function setupUpload() {
-
-    /*
-        OPEN MODAL
-    */
-
-    uploadTrigger.addEventListener(
-        "click",
-        openUploadModal
-    );
-
-
-    /*
-        FILE BROWSER
-    */
-
-    fileInput.addEventListener(
-        "change",
-        event => {
-
-            addFiles(
-                event.target.files
-            );
-
-            /*
-                Allows the same file to be
-                selected again.
-            */
-
-            fileInput.value = "";
-
-        }
-    );
-
-
-    /*
-        BROWSE BUTTON
-    */
-
-    const browseButton =
-        document.querySelector(
-            ".browse-button"
-        );
-
-
-    browseButton.addEventListener(
-        "click",
-        event => {
-
-            event.stopPropagation();
-
-            fileInput.click();
-
-        }
-    );
-
-
-    /*
-        DROP ZONE
-    */
-
-    dropZone.addEventListener(
-        "dragover",
-        event => {
-
-            event.preventDefault();
-
-            dropZone.classList.add(
-                "dragover"
-            );
-
-        }
-    );
-
-
-    dropZone.addEventListener(
-        "dragleave",
-        () => {
-
-            dropZone.classList.remove(
-                "dragover"
-            );
-
-        }
-    );
-
-
-    dropZone.addEventListener(
-        "drop",
-        event => {
-
-            event.preventDefault();
-
-            dropZone.classList.remove(
-                "dragover"
-            );
-
-
-            addFiles(
-                event.dataTransfer.files
-            );
-
-        }
-    );
-
-
-    /*
-        Clicking the drop zone itself
-        opens browser.
-    */
-
-    dropZone.addEventListener(
-        "click",
-        event => {
-
-            if (
-                event.target.closest(
-                    ".browse-button"
-                )
-            ) {
-
-                return;
-
-            }
-
-            fileInput.click();
-
-        }
-    );
-
-
-    /*
-        MODAL CLOSE
-    */
-
-    closeModal.addEventListener(
-        "click",
-        closeUploadModal
-    );
-
-
-    cancelUpload.addEventListener(
-        "click",
-        closeUploadModal
-    );
-
-
-    /*
-        ATTACH
-    */
-
-    uploadButton.addEventListener(
-        "click",
-        confirmUpload
-    );
-
-
-    /*
-        CLICK OUTSIDE
-    */
-
-    uploadModal.addEventListener(
-        "click",
-        event => {
-
-            if (
-                event.target === uploadModal
-            ) {
-
-                closeUploadModal();
-
-            }
-
-        }
-    );
-
-
-    /*
-        ESCAPE
-    */
-
-    document.addEventListener(
-        "keydown",
-        event => {
-
-            if (
-                event.key === "Escape" &&
-                uploadModal.classList.contains(
-                    "active"
-                )
-            ) {
-
-                closeUploadModal();
-
-            }
-
-        }
-    );
-
-}
-
-
-/* =========================================================
-   OPEN MODAL
-========================================================= */
-
-function openUploadModal() {
-
-    uploadModal.classList.add(
-        "active"
-    );
-
-    document.body.style.overflow =
-        "hidden";
-
-}
-
-
-/* =========================================================
-   CLOSE MODAL
-========================================================= */
-
-function closeUploadModal() {
-
-    uploadModal.classList.remove(
-        "active"
-    );
-
-    document.body.style.overflow =
-        "";
-
-}
+});
 
 
 /* =========================================================
@@ -1067,57 +132,60 @@ function closeUploadModal() {
 
 function addFiles(files) {
 
-    if (!files || files.length === 0) {
-        return;
+    for (const file of files) {
+
+        if (!isPDF(file)) {
+
+            showError(
+                `${file.name} is not a PDF file.`
+            );
+
+            continue;
+        }
+
+
+        if (selectedFiles.length >= 3) {
+
+            showError(
+                "Only 3 quotation files are required."
+            );
+
+            break;
+        }
+
+
+        const alreadyExists =
+            selectedFiles.some(
+                existing =>
+                    existing.name === file.name &&
+                    existing.size === file.size
+            );
+
+
+        if (alreadyExists) {
+            continue;
+        }
+
+
+        selectedFiles.push(file);
     }
 
 
-    Array.from(files).forEach(
-        file => {
-
-
-            /*
-                25 MB limit
-            */
-
-            if (
-                file.size >
-                25 * 1024 * 1024
-            ) {
-
-                alert(
-                    `${file.name} is larger than 25 MB.`
-                );
-
-                return;
-
-            }
-
-
-            /*
-                Prevent duplicates
-            */
-
-            const duplicate =
-                selectedFiles.some(
-                    existing =>
-                        existing.name === file.name &&
-                        existing.size === file.size
-                );
-
-
-            if (duplicate) {
-                return;
-            }
-
-
-            selectedFiles.push(file);
-
-        }
-    );
-
-
     renderFiles();
+
+}
+
+
+/* =========================================================
+   PDF VALIDATION
+========================================================= */
+
+function isPDF(file) {
+
+    return (
+        file.type === "application/pdf" ||
+        file.name.toLowerCase().endsWith(".pdf")
+    );
 
 }
 
@@ -1131,535 +199,648 @@ function renderFiles() {
     fileList.innerHTML = "";
 
 
-    if (
-        selectedFiles.length === 0
-    ) {
+    selectedFiles.forEach((file, index) => {
 
-        selectedFilesBox.classList.add(
-            "hidden"
-        );
+        const card =
+            document.createElement("div");
 
-        updateFileCounts();
+        card.className = "file-card";
 
-        uploadButton.disabled = true;
 
+        card.innerHTML = `
+
+            <div class="pdf-icon">
+                PDF
+            </div>
+
+            <div class="file-details">
+
+                <strong title="${escapeHTML(file.name)}">
+                    ${escapeHTML(file.name)}
+                </strong>
+
+                <span>
+                    ${formatFileSize(file.size)}
+                </span>
+
+            </div>
+
+            <button
+                class="remove-file"
+                data-index="${index}"
+                title="Remove file"
+            >
+                ×
+            </button>
+
+        `;
+
+
+        fileList.appendChild(card);
+
+    });
+
+
+    updateCounter();
+
+}
+
+
+/* =========================================================
+   REMOVE FILE
+========================================================= */
+
+fileList.addEventListener("click", (event) => {
+
+    const button =
+        event.target.closest(".remove-file");
+
+    if (!button) {
         return;
-
     }
-
-
-    selectedFilesBox.classList.remove(
-        "hidden"
-    );
-
-
-    selectedFiles.forEach(
-        (file, index) => {
-
-            const item =
-                document.createElement(
-                    "div"
-                );
-
-
-            item.className =
-                "file-item";
-
-
-            item.innerHTML = `
-
-                <div class="file-icon">
-                    ${getFileType(file)}
-                </div>
-
-                <div class="file-info">
-
-                    <strong
-                        title="${escapeHTML(file.name)}"
-                    >
-                        ${escapeHTML(file.name)}
-                    </strong>
-
-                    <small>
-                        ${formatSize(file.size)}
-                    </small>
-
-                </div>
-
-                <button
-                    type="button"
-                    class="remove-file"
-                    aria-label="Remove file"
-                >
-                    ×
-                </button>
-
-            `;
-
-
-            item
-                .querySelector(
-                    ".remove-file"
-                )
-                .addEventListener(
-                    "click",
-                    () => {
-
-                        selectedFiles.splice(
-                            index,
-                            1
-                        );
-
-                        renderFiles();
-
-                    }
-                );
-
-
-            fileList.appendChild(item);
-
-        }
-    );
-
-
-    updateFileCounts();
-
-    uploadButton.disabled = false;
-
-}
-
-
-/* =========================================================
-   FILE COUNTS
-========================================================= */
-
-function updateFileCounts() {
-
-    const count =
-        selectedFiles.length;
-
-
-    fileCount.textContent =
-        count === 0
-            ? "No files selected"
-            : `${count} file${count === 1 ? "" : "s"} selected`;
-
-
-    if (
-        fileCountDisplay
-    ) {
-
-        fileCountDisplay.textContent =
-            count === 0
-                ? ""
-                : `${count} document${count === 1 ? "" : "s"} attached`;
-
-    }
-
-}
-
-
-/* =========================================================
-   CONFIRM UPLOAD
-========================================================= */
-
-function confirmUpload() {
-
-    if (
-        selectedFiles.length === 0
-    ) {
-
-        return;
-
-    }
-
-
-    closeUploadModal();
-
-    updateFileCounts();
-
-
-    const oldText =
-        fileCountDisplay.textContent;
-
-
-    fileCountDisplay.textContent =
-        "✓ Documents attached";
-
-
-    setTimeout(
-        () => {
-
-            fileCountDisplay.textContent =
-                oldText;
-
-        },
-        1800
-    );
-
-}
-
-
-/* =========================================================
-   FILE TYPE
-========================================================= */
-
-function getFileType(file) {
-
-    const extension =
-        file.name
-            .split(".")
-            .pop()
-            .toUpperCase();
-
-
-    const supported = [
-        "PDF",
-        "DOC",
-        "DOCX",
-        "XLS",
-        "XLSX",
-        "CSV",
-        "PPT",
-        "PPTX",
-        "TXT"
-    ];
-
-
-    return supported.includes(
-        extension
-    )
-        ? extension
-        : "FILE";
-
-}
-
-
-/* =========================================================
-   FILE SIZE
-========================================================= */
-
-function formatSize(bytes) {
-
-    if (bytes === 0) {
-        return "0 Bytes";
-    }
-
-
-    const units = [
-        "Bytes",
-        "KB",
-        "MB",
-        "GB"
-    ];
 
 
     const index =
-        Math.floor(
-            Math.log(bytes) /
-            Math.log(1024)
+        Number(button.dataset.index);
+
+
+    selectedFiles.splice(index, 1);
+
+    renderFiles();
+
+});
+
+
+/* =========================================================
+   COUNTER
+========================================================= */
+
+function updateCounter() {
+
+    const count = selectedFiles.length;
+
+    fileCounter.textContent =
+        `${count} / 3 quotations selected`;
+
+
+    analyzeButton.disabled =
+        count !== 3;
+
+}
+
+
+/* =========================================================
+   ANALYZE
+========================================================= */
+
+analyzeButton.addEventListener(
+    "click",
+    analyzeQuotations
+);
+
+
+async function analyzeQuotations() {
+
+    if (selectedFiles.length !== 3) {
+
+        showError(
+            "Please select exactly 3 PDF quotations."
+        );
+
+        return;
+    }
+
+
+    hideError();
+
+    resultsSection.classList.add("hidden");
+
+    processingPanel.classList.remove("hidden");
+
+    analyzeButton.disabled = true;
+
+
+    try {
+
+        updateProgress(
+            20,
+            "Uploading quotation documents..."
         );
 
 
-    return (
-        (
-            bytes /
-            Math.pow(
-                1024,
-                index
-            )
-        ).toFixed(1)
-        + " "
-        + units[index]
+        const formData = new FormData();
+
+        formData.append(
+            "file1",
+            selectedFiles[0]
+        );
+
+        formData.append(
+            "file2",
+            selectedFiles[1]
+        );
+
+        formData.append(
+            "file3",
+            selectedFiles[2]
+        );
+
+
+        updateStep("step2", true);
+
+        updateProgress(
+            40,
+            "AI is extracting quotation information..."
+        );
+
+
+        const response =
+            await fetch(
+                `${API_BASE_URL}/compare_quotations`,
+                {
+                    method: "POST",
+                    body: formData
+                }
+            );
+
+
+        if (!response.ok) {
+
+            let message =
+                `Server returned ${response.status}`;
+
+            try {
+
+                const errorData =
+                    await response.json();
+
+                if (errorData.detail) {
+                    message = errorData.detail;
+                }
+
+            } catch (_) {}
+
+            throw new Error(message);
+        }
+
+
+        updateStep("step3", true);
+
+        updateProgress(
+            70,
+            "Comparing prices, delivery and warranty..."
+        );
+
+
+        const result =
+            await response.json();
+
+
+        updateStep("step4", true);
+
+        updateProgress(
+            90,
+            "Preparing AI recommendation..."
+        );
+
+
+        await sleep(500);
+
+
+        displayResults(result);
+
+
+        updateProgress(
+            100,
+            "Analysis complete."
+        );
+
+
+        await sleep(400);
+
+
+        processingPanel.classList.add("hidden");
+
+        resultsSection.classList.remove("hidden");
+
+
+        resultsSection.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+        });
+
+
+    } catch (error) {
+
+        console.error(error);
+
+        processingPanel.classList.add("hidden");
+
+        showError(
+            error.message ||
+            "Unable to analyze the quotations."
+        );
+
+    } finally {
+
+        analyzeButton.disabled =
+            selectedFiles.length !== 3;
+
+    }
+
+}
+
+
+/* =========================================================
+   DISPLAY RESULTS
+========================================================= */
+
+function displayResults(result) {
+
+    console.log("AI RESULT:", result);
+
+
+    /*
+        Expected backend response:
+
+        {
+            "best_vendor": "...",
+            "score": 92,
+            "reasoning": "...",
+            "comparison": [
+                {
+                    "vendor": "...",
+                    "price": "...",
+                    "delivery": "...",
+                    "warranty": "..."
+                }
+            ]
+        }
+    */
+
+
+    bestVendor.textContent =
+        result.best_vendor || "Unknown Vendor";
+
+
+    const score =
+        Number(result.score);
+
+
+    bestScore.textContent =
+        Number.isFinite(score)
+            ? formatScore(score)
+            : "—";
+
+
+    reasoningText.textContent =
+        result.reasoning ||
+        "No reasoning was returned by the AI.";
+
+
+    renderComparison(
+        result.comparison || []
     );
 
 }
 
 
 /* =========================================================
-   ESCAPE HTML
+   COMPARISON TABLE
 ========================================================= */
+
+function renderComparison(comparison) {
+
+    comparisonBody.innerHTML = "";
+
+
+    if (!comparison.length) {
+
+        comparisonBody.innerHTML = `
+
+            <tr>
+
+                <td colspan="4">
+                    No comparison data returned.
+                </td>
+
+            </tr>
+
+        `;
+
+        return;
+    }
+
+
+    comparison.forEach(vendor => {
+
+        const row =
+            document.createElement("tr");
+
+
+        const isWinner =
+            normalize(
+                vendor.vendor
+            ) === normalize(
+                bestVendor.textContent
+            );
+
+
+        if (isWinner) {
+            row.classList.add("winner-row");
+        }
+
+
+        row.innerHTML = `
+
+            <td>
+                ${escapeHTML(
+                    vendor.vendor || "—"
+                )}
+            </td>
+
+            <td>
+                ${escapeHTML(
+                    vendor.price || "—"
+                )}
+            </td>
+
+            <td>
+                ${escapeHTML(
+                    vendor.delivery || "—"
+                )}
+            </td>
+
+            <td>
+                ${escapeHTML(
+                    vendor.warranty || "—"
+                )}
+            </td>
+
+        `;
+
+
+        comparisonBody.appendChild(row);
+
+    });
+
+}
+
+
+/* =========================================================
+   PROGRESS
+========================================================= */
+
+function updateProgress(
+    percent,
+    message
+) {
+
+    progressBar.style.width =
+        `${percent}%`;
+
+    processingText.textContent =
+        message;
+
+}
+
+
+/* =========================================================
+   PROCESSING STEPS
+========================================================= */
+
+function updateStep(
+    stepId,
+    active
+) {
+
+    const step =
+        document.getElementById(stepId);
+
+    if (!step) {
+        return;
+    }
+
+    if (active) {
+
+        step.classList.add("active");
+
+        const span =
+            step.querySelector("span");
+
+        if (span) {
+            span.textContent = "✓";
+        }
+
+    }
+
+}
+
+
+/* =========================================================
+   ERROR
+========================================================= */
+
+function showError(message) {
+
+    errorMessage.textContent =
+        message;
+
+    errorPanel.classList.remove(
+        "hidden"
+    );
+
+}
+
+
+function hideError() {
+
+    errorPanel.classList.add(
+        "hidden"
+    );
+
+}
+
+
+/* =========================================================
+   RETRY
+========================================================= */
+
+retryButton.addEventListener(
+    "click",
+    () => {
+
+        hideError();
+
+        if (selectedFiles.length === 3) {
+
+            analyzeQuotations();
+
+        } else {
+
+            dropZone.scrollIntoView({
+                behavior: "smooth"
+            });
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   NEW ANALYSIS
+========================================================= */
+
+newAnalysisButton.addEventListener(
+    "click",
+    resetAnalysis
+);
+
+
+function resetAnalysis() {
+
+    selectedFiles = [];
+
+    renderFiles();
+
+    comparisonBody.innerHTML = "";
+
+    bestVendor.textContent = "—";
+
+    bestScore.textContent = "—";
+
+    reasoningText.textContent = "—";
+
+    processingPanel.classList.add(
+        "hidden"
+    );
+
+    resultsSection.classList.add(
+        "hidden"
+    );
+
+    hideError();
+
+    progressBar.style.width = "10%";
+
+    processingText.textContent =
+        "Reading vendor documents...";
+
+    document
+        .querySelectorAll(".processing-step")
+        .forEach((step, index) => {
+
+            if (index === 0) {
+
+                step.classList.add("active");
+
+            } else {
+
+                step.classList.remove("active");
+
+                const span =
+                    step.querySelector("span");
+
+                if (span) {
+                    span.textContent =
+                        index + 1;
+                }
+
+            }
+
+        });
+
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+
+}
+
+
+/* =========================================================
+   MOBILE SIDEBAR
+========================================================= */
+
+mobileMenu.addEventListener(
+    "click",
+    () => {
+
+        sidebar.classList.toggle(
+            "mobile-open"
+        );
+
+    }
+);
+
+
+/* =========================================================
+   HELPERS
+========================================================= */
+
+function formatFileSize(bytes) {
+
+    if (bytes < 1024) {
+        return `${bytes} B`;
+    }
+
+    if (bytes < 1024 * 1024) {
+        return `${(bytes / 1024).toFixed(1)} KB`;
+    }
+
+    return `${(
+        bytes /
+        (1024 * 1024)
+    ).toFixed(1)} MB`;
+
+}
+
+
+function formatScore(score) {
+
+    /*
+        Handles both:
+
+        92
+        0.92
+    */
+
+    if (score <= 1) {
+        return Math.round(score * 100);
+    }
+
+    return Math.round(score);
+
+}
+
+
+function normalize(value) {
+
+    return String(value || "")
+        .trim()
+        .toLowerCase();
+
+}
+
 
 function escapeHTML(value) {
 
     return String(value)
-        .replace(
-            /&/g,
-            "&amp;"
-        )
-        .replace(
-            /</g,
-            "&lt;"
-        )
-        .replace(
-            />/g,
-            "&gt;"
-        )
-        .replace(
-            /"/g,
-            "&quot;"
-        )
-        .replace(
-            /'/g,
-            "&#039;"
-        );
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
 
 }
 
 
-/* =========================================================
-   PROMPT CHIPS
-========================================================= */
+function sleep(ms) {
 
-function setupPromptChips() {
-
-    const chips =
-        document.querySelectorAll(
-            ".prompt-chip"
-        );
-
-
-    chips.forEach(
-        chip => {
-
-            chip.addEventListener(
-                "click",
-                () => {
-
-                    copilotInput.value =
-                        chip.textContent.trim();
-
-
-                    copilotInput.focus();
-
-
-                    copilotInput.style.height =
-                        "auto";
-
-
-                    copilotInput.style.height =
-                        Math.min(
-                            copilotInput.scrollHeight,
-                            180
-                        ) + "px";
-
-                }
-            );
-
-        }
+    return new Promise(
+        resolve => setTimeout(resolve, ms)
     );
-
-}
-
-
-/* =========================================================
-   GLOBAL SEARCH
-========================================================= */
-
-function setupGlobalSearch() {
-
-    const search =
-        document.getElementById(
-            "globalSearch"
-        );
-
-
-    if (!search) return;
-
-
-    search.addEventListener(
-        "keydown",
-        event => {
-
-            if (
-                event.key !== "Enter"
-            ) {
-
-                return;
-
-            }
-
-
-            const query =
-                search.value.trim();
-
-
-            if (!query) return;
-
-
-            navigateToPage(
-                "copilot"
-            );
-
-
-            copilotInput.value =
-                query;
-
-
-            copilotInput.focus();
-
-
-            search.value = "";
-
-        }
-    );
-
-
-    /*
-        Ctrl + K
-    */
-
-    document.addEventListener(
-        "keydown",
-        event => {
-
-            if (
-                (event.ctrlKey ||
-                 event.metaKey) &&
-                event.key.toLowerCase() === "k"
-            ) {
-
-                event.preventDefault();
-
-                search.focus();
-
-            }
-
-        }
-    );
-
-}
-
-
-/* =========================================================
-   MOBILE MENU
-========================================================= */
-
-function setupMobileMenu() {
-
-    const menu =
-        document.getElementById(
-            "mobileMenu"
-        );
-
-
-    const sidebar =
-        document.getElementById(
-            "sidebar"
-        );
-
-
-    if (!menu || !sidebar) return;
-
-
-    menu.addEventListener(
-        "click",
-        () => {
-
-            sidebar.classList.toggle(
-                "mobile-open"
-            );
-
-
-            updateSidebarOverlay();
-
-        }
-    );
-
-}
-
-
-function updateSidebarOverlay() {
-
-    let overlay =
-        document.querySelector(
-            ".sidebar-overlay"
-        );
-
-
-    if (!overlay) {
-
-        overlay =
-            document.createElement(
-                "div"
-            );
-
-
-        overlay.className =
-            "sidebar-overlay";
-
-
-        document.body.appendChild(
-            overlay
-        );
-
-
-        overlay.addEventListener(
-            "click",
-            closeMobileSidebar
-        );
-
-    }
-
-
-    const sidebar =
-        document.getElementById(
-            "sidebar"
-        );
-
-
-    if (
-        sidebar.classList.contains(
-            "mobile-open"
-        )
-    ) {
-
-        overlay.classList.add(
-            "active"
-        );
-
-    }
-
-    else {
-
-        overlay.classList.remove(
-            "active"
-        );
-
-    }
-
-}
-
-
-function closeMobileSidebar() {
-
-    const sidebar =
-        document.getElementById(
-            "sidebar"
-        );
-
-
-    const overlay =
-        document.querySelector(
-            ".sidebar-overlay"
-        );
-
-
-    if (sidebar) {
-
-        sidebar.classList.remove(
-            "mobile-open"
-        );
-
-    }
-
-
-    if (overlay) {
-
-        overlay.classList.remove(
-            "active"
-        );
-
-    }
 
 }

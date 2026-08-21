@@ -1,6 +1,6 @@
 from google import genai
 import json
-client = genai.Client(api_key="AQ.Ab8RN6Ksk6ABPEPinxF_xsBce7jq1SQ25iuoRUR3Q4TwGOxjag")
+client = genai.Client(api_key="AQ.Ab8RN6K9yNkK_oT5fhA3xw1h-ZAQMdRJIF8a3iz99irWIEssww")
 def analyze_quotation(file_path):
     uploaded_file = client.files.upload(file=file_path)
 
